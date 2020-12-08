@@ -19,8 +19,7 @@ class App extends React.Component{
     return (
       <div className="App">
         <header className="App-header">
-          <button onClick={()=>this.handleBtn()}>原生按钮</button>
-          <Button onClick={()=>this.handleBtn()} disabled={false}>按钮</Button>
+          <Button  type="primary" htmlType="submit" onClick={()=>this.handleBtn()} disabled={true}>按钮</Button>
           Learn React
         </header>
       </div>

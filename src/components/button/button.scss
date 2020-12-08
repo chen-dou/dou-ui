@@ -1,4 +1,9 @@
-.btn {
+.dou-btn {
+  height:32px;
   &[disabled] {
+    cursor:not-allowed;
   }
+}
+.dou-btn-lg{
+  height:40px;
 }

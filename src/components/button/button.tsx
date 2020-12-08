@@ -17,51 +17,67 @@ const ButtonTypes = tuple(
   'text'
 );
 const ButtonSizes = tuple('large', 'middle', 'small');
+const ButtonHTMLTypes = tuple('submit', 'button', 'reset');
 type ButtonType = typeof ButtonTypes[number];
 type ButtonSize = typeof ButtonSizes[number];
+type ButtonHTMLType = typeof ButtonHTMLTypes[number];
 interface BaseButtonProps {
-  btnType?: ButtonType;
+  type?: ButtonType;
   size?: ButtonSize;
   disabled?: boolean;
   className?: string;
   children?: React.ReactNode;
+  htmlType?:ButtonHTMLType;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
-type ButtonProps =  React.ButtonHTMLAttributes<HTMLElement> & BaseButtonProps
+type ButtonProps = Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick'> & BaseButtonProps
+// interface ButtonProps extends Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick'>{
+//   type?: ButtonType;
+//   size?: ButtonSize;
+//   disabled?: boolean;
+//   className?: string;
+//   children?: React.ReactNode;
+//   htmlType?:ButtonHTMLType;
+//   onClick?: React.MouseEventHandler<HTMLElement>;
+// }
 
-
-<<<<<<< HEAD
-const Button:React.FC<BaseButtonProps> = (props) => {
+const Button: React.FC<ButtonProps> = (props) => {
   const { getPrefixCls } = React.useContext(ConfigContext);
   const prefixCls = getPrefixCls('btn');
-  const {type,size} = props
-  console.log(type)
+  const { type, htmlType,size, children, disabled } = props;
+  let sizeCls = '';
+  switch (size) {
+    case 'large':
+      sizeCls = 'lg';
+      break;
+    case 'small':
+      sizeCls = 'sm';
+      break;
+    default:
+      break;
+  }
   const classes = classNames(
     prefixCls,
     {
       [`${prefixCls}-${type}`]:type,
-      [`${prefixCls}-${size}`]:size
+      [`${prefixCls}-${sizeCls}`]:sizeCls
     }
   )
-=======
-const Button: React.FC<ButtonProps> = (props) => {
-  const { btnType, size, children, disabled } = props;
-  console.log(btnType);
-  const classes = classNames('btn', {
-    [`btn-${btnType}`]: btnType,
-    [`btn-${size}`]: size,
-  });
->>>>>>> 97d2183c75e9000152364f6e4179ca7f2ec81958
+  
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => {
+    const { onClick } = props;
+    if (onClick) {
+      (onClick as React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>)(e);
+    }
+  }
   return (
-    <>
-      <button disabled={disabled} className={classes}>
-        {children}
-      </button>
-    </>
+    <button type={htmlType} disabled={disabled} onClick={handleClick} className={classes}>
+      {children}
+    </button>
   );
 };
 Button.defaultProps = {
   disabled: false,
-  btnType: 'default',
-  size: 'middle',
+  htmlType: 'button'
 };
 export default Button;
