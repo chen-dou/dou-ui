@@ -1,5 +1,7 @@
 import React from 'react'
 import classNames from 'classnames';
+import { ConfigContext } from '../config-provider/index'
+
 
 const tuple = <T extends string[]>(...args: T) => args;
 const ButtonTypes = tuple('default', 'primary', 'ghost', 'dashed', 'link', 'text');
@@ -12,13 +14,15 @@ interface BaseButtonProps {
 }
 
 const Button:React.FC<BaseButtonProps> = (props) => {
+  const { getPrefixCls } = React.useContext(ConfigContext);
+  const prefixCls = getPrefixCls('btn');
   const {type,size} = props
   console.log(type)
   const classes = classNames(
-    'btn',
+    prefixCls,
     {
-      [`btn-${type}`]:type,
-      [`btn-${size}`]:size
+      [`${prefixCls}-${type}`]:type,
+      [`${prefixCls}-${size}`]:size
     }
   )
   return (
